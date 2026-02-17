@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Trezor – Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --hero:#0b2f57;
+      --hero2:#0a2a4b;
+
+      --card: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.06);
+      --stroke: rgba(255,255,255,.16);
+
+      --text:#ffffff;
+      --muted: rgba(255,255,255,.78);
+
+      --b1:#4479FF;
+      --b2:#7B79FF;
+      --gold:#DED38F;
+      --orange:#FF6201;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, var(--hero), var(--hero2));
+      color: var(--text);
+      overflow-x:hidden;
+    }
+
+    /* soft glow background */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:-200px;
+      pointer-events:none;
+      background:
+        radial-gradient(700px 420px at 50% 15%, rgba(255,255,255,.08), transparent 60%),
+        radial-gradient(520px 320px at 18% 0%, rgba(68,121,255,.18), transparent 55%),
+        radial-gradient(520px 320px at 82% 10%, rgba(123,121,255,.14), transparent 55%),
+        radial-gradient(420px 260px at 75% 80%, rgba(222,211,143,.10), transparent 60%);
+      z-index:0;
+    }
+
+    .wrap{
+      position:relative;
+      z-index:1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 22px 18px 60px;
+    }
+
+    /* TOP BAR */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding: 10px 6px 18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 240px;
+    }
+    .logo-slot{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.12);
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      letter-spacing:.5px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    }
+    .brand h1{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:.6px;
+      text-transform: uppercase;
+      opacity:.95;
+      font-weight: 900;
+    }
+    .brand p{
+      margin:2px 0 0;
+      font-size: 12px;
+      opacity:.75;
+    }
+
+    /* BUTTONS */
+    .btn{
+      height: 46px;
+      padding: 0 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.10);
+      color:#fff;
+      cursor:pointer;
+      font-weight: 700;
+      letter-spacing:.4px;
+      transition: transform .15s ease, border-color .2s ease, background .2s ease;
+      position:relative;
+      overflow:hidden;
+      white-space:nowrap;
+    }
+    .btn:active{ transform: scale(.98); }
+
+    .btn-ghost{
+      background: transparent;
+      border-color: rgba(255,255,255,.35);
+    }
+    .btn-ghost:hover{
+      border-color: rgba(255,255,255,.65);
+      background: rgba(255,255,255,.06);
+    }
+
+    .btn-glow{
+      border: none;
+      background: rgba(8,18,40,.55);
+      box-shadow: 0 18px 40px rgba(0,0,0,.22);
+    }
+    .btn-glow::before{
+      content:"";
+      position:absolute;
+      inset:-3px;
+      border-radius: 16px;
+      background: linear-gradient(45deg, var(--b1), var(--b2), var(--gold), var(--b2), var(--b1));
+      background-size: 300%;
+      filter: blur(10px);
+      opacity: 0;
+      transition: opacity .25s ease;
+      z-index:-1;
+      animation: glowMove 7s linear infinite;
+    }
+    .btn-glow:hover::before{ opacity:.7; }
+
+    @keyframes glowMove{
+      0%{ background-position:0 0; }
+      50%{ background-position:300% 0; }
+      100%{ background-position:0 0; }
+    }
+
+    /* HEADER CARD */
+    .header{
+      display:grid;
+      grid-template-columns: 1.4fr .6fr;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      border: 1px solid var(--stroke);
+      border-radius: 22px;
+      box-shadow: 0 24px 60px rgba(0,0,0,.22);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .welcome{
+      padding: 22px 22px 18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .welcome::after{
+      content:"";
+      position:absolute;
+      inset:-120px;
+      background: radial-gradient(500px 260px at 20% 30%, rgba(222,211,143,.10), transparent 60%),
+                  radial-gradient(520px 280px at 80% 0%, rgba(68,121,255,.15), transparent 62%);
+      pointer-events:none;
+    }
+    .welcome .content{ position:relative; z-index:1; }
+
+    .user-title{
+      margin:0;
+      font-size: clamp(26px, 3.2vw, 44px);
+      font-weight: 900;
+      letter-spacing:.4px;
+      line-height:1.05;
+      text-transform: uppercase;
+    }
+    .user-sub{
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height:1.5;
+      max-width: 62ch;
+      font-size: 14px;
+    }
+
+    .pillrow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 14px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.10);
+      font-size: 12px;
+      color: rgba(255,255,255,.86);
+    }
+    .dot{
+      width:10px; height:10px;
+      border-radius:999px;
+      background: var(--gold);
+      box-shadow: 0 0 18px rgba(222,211,143,.55);
+    }
+
+    /* GOLD STATS */
+    .stats{
+      padding: 18px 18px 16px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap: 14px;
+    }
+
+    .stat-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .stat-label{
+      font-size: 12px;
+      color: rgba(255,255,255,.78);
+      text-transform: uppercase;
+      letter-spacing:.8px;
+      font-weight: 800;
+    }
+
+    .count{
+      font-size: 44px;
+      font-weight: 900;
+      line-height:1;
+      letter-spacing:.4px;
+    }
+
+    .count span{
+      font-size: 12px;
+      font-weight: 800;
+      opacity:.8;
+      letter-spacing: .9px;
+      text-transform: uppercase;
+      margin-left: 6px;
+    }
+
+    .progress{
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .progress > div{
+      height:100%;
+      width: 45%; /* TODO: napoj na real value */
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--gold), rgba(222,211,143,.25));
+      box-shadow: 0 0 22px rgba(222,211,143,.30);
+    }
+
+    .stat-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .btn-small{
+      height: 42px;
+      padding: 0 14px;
+      border-radius: 14px;
+      font-size: 13px;
+    }
+
+    /* MAIN GRID */
+    .grid{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: 1fr .75fr;
+      gap: 14px;
+    }
+
+    .vault{
+      padding: 18px;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin: 2px 0 14px;
+    }
+    .section-title h2{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:.8px;
+      text-transform: uppercase;
+      font-weight: 900;
+      opacity:.95;
+    }
+    .section-title .hint{
+      font-size: 12px;
+      opacity: .75;
+    }
+
+    .bricks{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .brick{
+      aspect-ratio: 1 / 1;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.10);
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      padding: 10px 10px;
+      position:relative;
+      overflow:hidden;
+    }
+    .brick::before{
+      content:"";
+      position:absolute;
+      inset:-60px;
+      background: radial-gradient(160px 120px at 30% 30%, rgba(222,211,143,.22), transparent 60%),
+                  radial-gradient(160px 120px at 80% 10%, rgba(68,121,255,.14), transparent 65%);
+      opacity: .8;
+      pointer-events:none;
+    }
+    .brick .meta{
+      position:relative;
+      z-index:1;
+      font-size: 12px;
+      opacity:.86;
+      font-weight: 800;
+      letter-spacing:.4px;
+    }
+    .brick .tag{
+      position:relative;
+      z-index:1;
+      font-size: 11px;
+      opacity:.7;
+    }
+
+    .brick.locked{
+      background: rgba(0,0,0,.06);
+      opacity: .55;
+      filter: saturate(.9);
+    }
+    .brick.locked::before{ opacity:.45; }
+
+    /* RIGHT PANEL */
+    .side{
+      padding: 18px;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+
+    .qrbox{
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px dashed rgba(255,255,255,.22);
+      background: rgba(0,0,0,.08);
+    }
+    .qrbox h3{
+      margin:0 0 8px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing:.8px;
+      font-weight: 900;
+      opacity:.95;
+    }
+    .qrbox p{
+      margin:0 0 12px;
+      font-size: 13px;
+      color: rgba(255,255,255,.78);
+      line-height:1.5;
+    }
+    .code-row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .code-row input{
+      height: 44px;
+      width: 210px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(0,0,0,.18);
+      color:#fff;
+      outline:none;
+      font-size: 14px;
+    }
+    .code-row input::placeholder{ color: rgba(255,255,255,.65); }
+
+    .mini{
+      font-size: 12px;
+      opacity:.75;
+      line-height:1.4;
+      margin-top: 8px;
+    }
+
+    /* responsive */
+    @media (max-width: 900px){
+      .header{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns: 1fr; }
+      .bricks{ grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 520px){
+      .brand{ min-width:auto; }
+      .bricks{ grid-template-columns: repeat(2, 1fr); }
+      .btn{ height:44px; }
+      .count{ font-size: 40px; }
+      .code-row input{ width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo-slot">5P</div>
+        <div>
+          <h1>Trezor</h1>
+          <p>tvoje tehličky & progres</p>
+        </div>
+      </div>
+
+      <button class="btn btn-ghost" type="button">Odhlásiť</button>
+    </div>
+
+    <div class="header">
+      <div class="card welcome">
+        <div class="content">
+          <h2 class="user-title">JÁN SEDLÁK</h2>
+          <p class="user-sub">
+            Vitaj v trezore. Tu vidíš svoje zlaté tehličky, progres a môžeš si pridať novú tehličku po naskenovaní QR kódu.
+          </p>
+
+          <div class="pillrow">
+            <div class="pill"><span class="dot"></span> Stav: aktívny</div>
+            <div class="pill">Úroveň: <b>Učeň trezoru</b></div>
+            <div class="pill">Posledná tehlička: <b>včera</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card stats">
+        <div class="stat-top">
+          <div>
+            <div class="stat-label">Zlaté tehličky</div>
+            <div class="count">9 <span>/ 20</span></div>
+          </div>
+          <div class="pill" style="border-color: rgba(222,211,143,.35); background: rgba(222,211,143,.10);">
+            ✦ bonus
+          </div>
+        </div>
+
+        <div>
+          <div class="progress"><div></div></div>
+          <div class="mini">Cieľ: nazbierať 20 tehličiek. Každá tehlička = 1 QR kód z hodiny.</div>
+        </div>
+
+        <div class="stat-actions">
+          <button class="btn btn-glow btn-small" type="button">Získať tehličku</button>
+          <button class="btn btn-small" type="button">História</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card vault">
+        <div class="section-title">
+          <h2>Moje tehličky</h2>
+          <div class="hint">klikateľné dlaždice (placeholder)</div>
+        </div>
+
+        <div class="bricks">
+          <div class="brick"><div class="meta">#01</div><div class="tag">Získaná</div></div>
+          <div class="brick"><div class="meta">#02</div><div class="tag">Získaná</div></div>
+          <div class="brick"><div class="meta">#03</div><div class="tag">Získaná</div></div>
+          <div class="brick"><div class="meta">#04</div><div class="tag">Získaná</div></div>
+
+          <div class="brick"><div class="meta">#05</div><div class="tag">Získaná</div></div>
+          <div class="brick"><div class="meta">#06</div><div class="tag">Získaná</div></div>
+          <div class="brick"><div class="meta">#07</div><div class="tag">Získaná</div></div>
+          <div class="brick"><div class="meta">#08</div><div class="tag">Získaná</div></div>
+
+          <div class="brick"><div class="meta">#09</div><div class="tag">Získaná</div></div>
+          <div class="brick locked"><div class="meta">#10</div><div class="tag">Zamknutá</div></div>
+          <div class="brick locked"><div class="meta">#11</div><div class="tag">Zamknutá</div></div>
+          <div class="brick locked"><div class="meta">#12</div><div class="tag">Zamknutá</div></div>
+        </div>
+      </div>
+
+      <div class="card side">
+        <div class="qrbox">
+          <h3>Pridať tehličku</h3>
+          <p>Sem neskôr napojíš sken QR / kód z hodiny. Zatiaľ to môže byť manuálny vstup.</p>
+
+          <div class="code-row">
+            <input type="text" placeholder="Zadaj kód (napr. 5P-AB12)" />
+            <button class="btn btn-glow btn-small" type="button">Pridať</button>
+          </div>
+
+          <div class="mini">
+            Tip: kód nech je jednorazový a viazaný na hodinu/produkt, aby sa nedal spamovať.
+          </div>
+        </div>
+
+        <div class="qrbox" style="border-style: solid;">
+          <h3>Profil</h3>
+          <p><b>Meno:</b> Ján Sedlák<br>
+             <b>Nick:</b> jan_sedlak<br>
+             <b>Stav:</b> aktívny</p>
+          <button class="btn btn-small" type="button">Zmeniť heslo</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

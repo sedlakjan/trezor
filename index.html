@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hero – stvorboj vibe</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --hero: #0b2f57;
+      --hero2:#0a2a4b;
+      --white:#ffffff;
+      --text:#ffffff;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: #fff; 
+      color: var(--text);
+    }
+
+    /* FULL-WIDTH HERO */
+    .hero{
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--hero), var(--hero2));
+  overflow: hidden;
+border-radius: 0 0 60px 60px;
+    }
+
+
+
+
+    .hero::before{
+      content:"";
+      position:absolute;
+       inset: 0;
+      background:
+        radial-gradient(700px 400px at 50% 40%, rgba(255,255,255,.07), transparent 60%),
+        radial-gradient(500px 280px at 20% 20%, rgba(255,255,255,.04), transparent 55%),
+        radial-gradient(520px 320px at 80% 15%, rgba(255,255,255,.03), transparent 60%);
+      pointer-events:none;
+      border-radius: inherit;
+    }
+
+ 
+    .topbar{
+      position: relative;
+      z-index: 2;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 18px 28px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      letter-spacing:.5px;
+      opacity:.95;
+    }
+
+    .logo-slot{
+      width: 150px;
+      height: 34px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.08);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .auth{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items: flex-start;   /* aby link nezačal centrovať veci */
+  max-width: 520px;
+    }
+    .auth a{
+  display:inline-block;
+  max-width: 520px;
+  white-space: normal;
+  word-break: break-word; /* keby si mal extrémne dlhé slovo */
+  color: #fff;
+  text-decoration: underline;
+  align-content: center;
+}
+    .break { flex-basis:100%; height:0; }
+    .auth input{
+      height: 34px;
+      width: 160px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.25);
+      background: rgba(0,0,0,.18);
+      color: #fff;
+      outline:none;
+      font-size: 14px;
+    }
+    .auth input::placeholder{ color: rgba(255,255,255,.7); }
+
+    /* CENTROVANÝ OBSAH */
+    .hero-center{
+      position: relative;
+      z-index: 2;
+      min-height: calc(100vh - 80px);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding: 40px 18px 120px; /* spodok nechá priestor pre výrez */
+    }
+
+    .hero h1{
+      margin: 0;
+      font-weight: 900;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      line-height: 1;
+      font-size: clamp(42px, 6vw, 86px);
+    }
+
+    .hero p{
+      margin: 18px 0 0;
+      max-width: 1000px;
+      opacity: .85;
+      line-height: 1.5;
+      font-size: 15px;
+    }
+.signin{
+    background-color:var(--color-light-blue);
+    color:var(--color-white);
+    border-color:white;
+    
+    padding:.75rem 1.5rem;
+    border-radius:25px;
+
+    font-weight:600;
+    transition:all .3s ease;
+    border:2px solid transparent;
+}
+    /* TOTO JE TEN “CICÍK”, ALE AKO BIELY VÝREZ (nie modrý výbežok) */
+    .hero-notch{
+      position:absolute;
+      left:50%;
+      transform: translateX(-50%);
+      bottom:-1px;
+      width: 240px;
+      height: 120px;
+      pointer-events:none;
+      z-index: 3;
+    }
+
+    /* ďalšia sekcia – biela, aby výrez dával zmysel */
+    .next{
+      background: var(--white);
+      color:#111;
+      min-height: 60vh;
+      padding: 120px 20px 80px;
+      text-align:center;
+    }
+
+    /* MOBILE */
+    @media (max-width: 700px){
+      .topbar{
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 14px 16px;
+      }
+      .auth{
+        width: 100%;
+        justify-content:flex-end;
+      }
+      .auth input{
+        width: 48%;
+        min-width: 130px;
+      }
+      .hero-notch{
+        width: 190px;
+        height: 95px;
+      }
+      .hero-center{
+        padding-bottom: 110px;
+      }
+    }
+    #flip {
+  height:80px;
+  overflow:hidden;
+}
+
+#flip > div > div {
+  color:#fff;
+  padding: 0 24px;
+  height:94px;
+  line-height: 1.3;
+  display:inline-block;
+  padding-top: 2px;
+}
+
+#flip div:first-child {
+  animation: show 5s linear infinite;
+}
+
+#flip div div {
+  background:#FF6201;
+}
+#flip div:first-child div {
+  background:#DED38F;
+}
+#flip div:last-child div {
+  background:#7B79FF;
+}
+
+@keyframes show {
+  0% {margin-top:-270px;}
+  5% {margin-top:-180px;}
+  33% {margin-top:-180px;}
+  38% {margin-top:-90px;}
+  66% {margin-top:-90px;}
+  71% {margin-top:0px;}
+  99.99% {margin-top:0px;}
+  100% {margin-top:-270px;}
+}
+
+#nadpis {
+  color:#999;
+  text-transform: uppercase;
+  font-size:68px;
+  font-weight:bold;
+  padding-top:200px;  
+  position: relative;  /* alebo nič */
+  bottom: auto;
+  padding-top: 200px;
+  display:block;
+}
+.trezor-glow {
+    width: 220px;
+    height: 55px;
+    border: none;
+    outline: none;
+    color: #fff;
+    background: #0f1e3a;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Glow layer */
+.trezor-glow:before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: calc(100% + 6px);
+    height: calc(100% + 6px);
+    border-radius: 14px;
+
+    background: linear-gradient(
+        45deg,
+        #4479FF,
+        #7B79FF,
+        #DED38F,
+        #7B79FF,
+        #4479FF
+    );
+
+    background-size: 300%;
+    filter: blur(8px);
+    z-index: -1;
+
+    animation: trezorGlow 8s linear infinite;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+}
+
+/* vnútorné tlačidlo */
+.trezor-glow:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #0f1e3a;
+    left: 0;
+    top: 0;
+    border-radius: 12px;
+    z-index: -1;
+}
+
+/* hover aktivuje glow */
+.trezor-glow:hover:before {
+    opacity: 1;
+}
+
+/* klik efekt */
+.trezor-glow:active {
+    transform: scale(0.97);
+}
+
+@keyframes trezorGlow {
+    0%   { background-position: 0 0; }
+    50%  { background-position: 300% 0; }
+    100% { background-position: 0 0; }
+}
+
+
+.hero-sosacik{
+  position: absolute;
+  left: 0;
+  bottom: -1px;          /* aby nevznikla 1px čiarka */
+  width: 100%;
+  height: 90px;          /* výška “bieleho pásu” */
+  display: block;
+  z-index: 5;            /* nad pozadiami */
+  pointer-events: none;
+}
+
+.trezor-outline{
+    width: 120px;
+    height: 55px;
+    border-radius: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+
+    background: transparent;
+    color: #ffffff;
+    border: 2px solid rgba(255,255,255,0.7);
+    transition: all .3s ease;
+}
+
+/* jemný glow iba pri hover */
+.trezor-outline::before{
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 14px;
+    background: linear-gradient(
+        45deg,
+        #4479FF,
+        #7B79FF
+    );
+    filter: blur(6px);
+    opacity: 0;
+    z-index: -1;
+    transition: opacity .3s ease;
+}
+
+.trezor-outline:hover{
+    border-color: #4479FF;
+    color: #fff;
+}
+
+.trezor-outline:hover::before{
+    opacity: .6;
+}
+
+/* click */
+.trezor-outline:active{
+    transform: scale(0.97);
+}
+/* ===== MODALS ===== */
+.modal-overlay{
+  position: fixed;
+  inset: 0;
+  display: none;              /* hidden default */
+  place-items: center;
+  padding: 18px;
+  z-index: 999;
+  background: rgba(0,0,0,.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  
+}
+
+.modal-overlay.is-open{ display: grid; }
+
+.modal{
+  display: none;                /* <-- CHÝBALO */
+  width: min(520px, 92vw);
+  background: rgba(255,255,255,.96);
+  border-radius: 18px;
+  box-shadow: 0 30px 90px rgba(0,0,0,.35);
+  overflow: hidden;
+  transform: translateY(10px);
+  opacity: 0;
+  transition: transform .18s ease, opacity .18s ease;
+}
+
+.modal.is-active{ 
+  display: block;               /* len aktívny sa zobrazí */
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 18px 20px 10px;
+}
+
+.modal-head h2{
+  margin: 0;
+  color: #0a2a4b;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: .3px;
+}
+
+.modal-x{
+  width: 42px;
+  height: 42px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 30px;
+  line-height: 1;
+  color: rgba(10,42,75,.65);
+  border-radius: 12px;
+  transition: background .2s ease, color .2s ease;
+}
+.modal-x:hover{
+  background: rgba(10,42,75,.08);
+  color: rgba(10,42,75,.9);
+}
+
+.modal-body{
+  padding: 10px 20px 20px;
+  display:flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field span{
+  display:none; /* minimalisticky: label schovaný, používaš placeholder */
+}
+
+.field input{
+  width: 100%;
+  height: 56px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 3px solid #0a2a4b;
+  outline: none;
+  font-size: 16px;
+  color: #0a2a4b;
+  background: #fff;
+}
+
+.field input::placeholder{
+  color: rgba(10,42,75,.55);
+  font-weight: 600;
+}
+
+.modal-primary{
+  height: 58px;
+  border: none;
+  border-radius: 12px;
+  background: #0a2a4b;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .12s ease, filter .2s ease;
+}
+.modal-primary:hover{ filter: brightness(1.05); }
+.modal-primary:active{ transform: scale(.98); }
+
+.modal-mini{
+  margin: 2px 0 0;
+  color: rgba(10,42,75,.65);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+  </style>
+</head>
+
+<body>
+  
+  <header class="hero">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo-slot"></div>
+        <img src="5_penazi_tag_white.svg"/>
+      </div>
+      <form class="auth" autocomplete="off">
+                <button class="trezor-outline" type="button">
+  Vytvoriť trezor
+</button>
+        <button class="trezor-glow" type="button">
+  Vstúpiť do trezoru
+</button>
+
+      </form>
+    </div>
+
+    <div class="hero-center">
+      <div id=nadpis>
+         ZBIERAJ 
+      <div id=flip>
+    <div><div>VEDOMOSTI</div></div>
+    <div><div>ZRUČNOSTI</div></div>
+    <div><div>TEHLIČKY</div></div>
+     </div>
+         DO SVOJHO TREZORU
+    </div>
+<br><br><br><br><br><br>
+      <p style="padding-top: 10em;">
+        Vytvor si profil, prihlás sa, a získaj zlaté tehly skenovaním QR kódu na hodinách finančného vzdelávania<br>
+        Svoje heslo a meno nezabudni, tak ako do trezora, nedá sa už znova len tak získať!
+      </p>
+    </div>
+<svg class="hero-sosacik" viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true">
+  <path fill="#fff" d="
+    M0,0
+    H600
+    C660,0 690,120 720,120
+    C750,120 780,0 840,0
+    H1440
+    V160
+    H0
+    Z
+  "></path>
+</svg>
+
+  </header>
+
+  <section class="next">
+    <h2>Tu začína nová sekcia</h2>
+    <p>Ak bude treba</p>
+  </section>
+  <!-- MODAL OVERLAY -->
+<div class="modal-overlay" id="modalOverlay" aria-hidden="true">
+  <!-- LOGIN MODAL -->
+  <div class="modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <div class="modal-head">
+      <h2 id="loginTitle">Prihlásenie</h2>
+      <button class="modal-x" type="button" data-close aria-label="Zavrieť">×</button>
+    </div>
+
+    <form class="modal-body" autocomplete="off">
+      <label class="field">
+        <span>Meno alebo tvoj Nick</span>
+        <input type="text" placeholder="Meno alebo tvoj Nick" />
+      </label>
+
+      <label class="field">
+        <span>heslo</span>
+        <input type="password" placeholder="Heslo" />
+      </label>
+
+      <button class="modal-primary" type="button">✓ Prihlásiť</button>
+      <p class="modal-mini">Tip: ak heslo zabudneš, do trezora sa už len tak nedostaneš 😄</p>
+    </form>
+  </div>
+
+  <!-- REGISTER MODAL -->
+  <div class="modal" id="registerModal" role="dialog" aria-modal="true" aria-labelledby="regTitle">
+    <div class="modal-head">
+      <h2 id="regTitle">Vytvoriť trezor</h2>
+      <button class="modal-x" type="button" data-close aria-label="Zavrieť">×</button>
+    </div>
+
+    <form class="modal-body" autocomplete="off">
+      <label class="field">
+        <span>Meno / nick</span>
+        <input type="text" placeholder="napr. JanSedlak" />
+      </label>
+
+      <label class="field">
+        <span>Heslo</span>
+        <input type="password" placeholder="vymysli heslo" />
+      </label>
+
+      <label class="field">
+        <span>Heslo znova</span>
+        <input type="password" placeholder="zopakuj heslo" />
+      </label>
+
+      <button class="modal-primary" type="button">✓ Vytvoriť</button>
+      <p class="modal-mini">Heslo sa neposiela na email – zapamätaj si ho.</p>
+    </form>
+  </div>
+</div>
+<script>
+  const overlay = document.getElementById('modalOverlay');
+  const loginModal = document.getElementById('loginModal');
+  const registerModal = document.getElementById('registerModal');
+
+  // tvoje buttony na landing page:
+  const btnLogin = document.querySelector('.trezor-glow');     // "Vstúpiť do trezoru"
+  const btnRegister = document.querySelector('.trezor-outline'); // "Vytvoriť trezor"
+
+  function openModal(which){
+    overlay.classList.add('is-open');
+    overlay.setAttribute('aria-hidden', 'false');
+
+    loginModal.classList.remove('is-active');
+    registerModal.classList.remove('is-active');
+
+    if(which === 'login'){
+      loginModal.classList.add('is-active');
+      // focus prvý input
+      setTimeout(() => loginModal.querySelector('input')?.focus(), 0);
+    } else {
+      registerModal.classList.add('is-active');
+      setTimeout(() => registerModal.querySelector('input')?.focus(), 0);
+    }
+  }
+
+  function closeModal(){
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden', 'true');
+    loginModal.classList.remove('is-active');
+    registerModal.classList.remove('is-active');
+  }
+
+  btnLogin?.addEventListener('click', () => openModal('login'));
+  btnRegister?.addEventListener('click', () => openModal('register'));
+
+  // klik na overlay mimo modalu zatvorí
+  overlay.addEventListener('click', (e) => {
+    if(e.target === overlay) closeModal();
+  });
+
+  // X tlačidlá
+  overlay.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', closeModal));
+
+  // ESC zatvorí
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && overlay.classList.contains('is-open')) closeModal();
+  });
+</script>
+
+</body>
+</html>
