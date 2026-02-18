@@ -50,35 +50,29 @@ border-radius: 0 0 60px 60px;
     }
 
  
-    .topbar{
-      position: relative;
-      z-index: 2;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding: 18px 28px;
-    }
+.topbar{
+  position: relative;
+  z-index: 10;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  padding: 18px 28px;
+}
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight:800;
-      letter-spacing:.5px;
-      opacity:.95;
-    }
-
-    .logo-slot{
-      width: 150px;
-      height: 34px;
-      border-radius: 8px;
-      background: rgba(255,255,255,.08);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size: 12px;
-      font-weight: 700;
-    }
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width: 0;
+}
+.logo-desktop{ display:block; height: 55px; width: auto; }
+.logo-mobile{ display:none; height: 34px; width: auto; }
+.menu-wrap{
+  position: relative;
+  margin-left: auto;
+  display:flex;
+  align-items:center;
+}
 
     .auth{
       display:flex;
@@ -151,17 +145,6 @@ border-radius: 0 0 60px 60px;
     transition:all .3s ease;
     border:2px solid transparent;
 }
-    /* TOTO JE TEN “CICÍK”, ALE AKO BIELY VÝREZ (nie modrý výbežok) */
-    .hero-notch{
-      position:absolute;
-      left:50%;
-      transform: translateX(-50%);
-      bottom:-1px;
-      width: 240px;
-      height: 120px;
-      pointer-events:none;
-      z-index: 3;
-    }
 
     /* ďalšia sekcia – biela, aby výrez dával zmysel */
     .next{
@@ -172,66 +155,40 @@ border-radius: 0 0 60px 60px;
       text-align:center;
     }
 
-    /* MOBILE */
-    @media (max-width: 700px){
-      .topbar{
-        flex-wrap: wrap;
-        gap: 12px;
-        padding: 14px 16px;
-      }
-      .auth{
-        width: 100%;
-        justify-content:flex-end;
-      }
-      .auth input{
-        width: 48%;
-        min-width: 130px;
-      }
-      .hero-notch{
-        width: 190px;
-        height: 95px;
-      }
-      .hero-center{
-        padding-bottom: 110px;
-      }
-    }
-    #flip {
-  height:80px;
-  overflow:hidden;
-}
 
-#flip > div > div {
-  color:#fff;
-  padding: 0 24px;
-  height:94px;
-  line-height: 1.3;
+#flip{
   display:inline-block;
-  padding-top: 2px;
+  height: 1.15em;        /* výška presne podľa fontu */
+  overflow:hidden;
+  vertical-align: bottom;
 }
 
-#flip div:first-child {
-  animation: show 5s linear infinite;
+.flip-inner{
+  display:block;
+  will-change: transform;
+  animation: flip 6s cubic-bezier(.2,.8,.2,1) infinite;
 }
 
-#flip div div {
-  background:#FF6201;
-}
-#flip div:first-child div {
-  background:#DED38F;
-}
-#flip div:last-child div {
-  background:#7B79FF;
+.word{
+  display:block;
+  padding: 0 .45em;
+  line-height: 1.15em;   /* musí sedieť s #flip height */
+  height: 1.15em;        /* rovnaké */
+  color:#fff;
+  font-weight: 900;
+  letter-spacing: .02em;
 }
 
-@keyframes show {
-  0% {margin-top:-270px;}
-  5% {margin-top:-180px;}
-  33% {margin-top:-180px;}
-  38% {margin-top:-90px;}
-  66% {margin-top:-90px;}
-  71% {margin-top:0px;}
-  99.99% {margin-top:0px;}
-  100% {margin-top:-270px;}
+/* farby */
+.word.w1{ background:#DED38F; }
+.word.w2{ background:#FF6201; }
+.word.w3{ background:#7B79FF; }
+
+@keyframes flip{
+  0%, 20%   { transform: translateY(0); }
+  33%, 53%  { transform: translateY(-1.15em); }
+  66%, 86%  { transform: translateY(-2.30em); }
+  100%      { transform: translateY(0); }
 }
 
 #nadpis {
@@ -239,10 +196,9 @@ border-radius: 0 0 60px 60px;
   text-transform: uppercase;
   font-size:68px;
   font-weight:bold;
-  padding-top:200px;  
+  padding-top:0px;  
   position: relative;  /* alebo nič */
   bottom: auto;
-  padding-top: 200px;
   display:block;
 }
 .trezor-glow {
@@ -490,40 +446,182 @@ border-radius: 0 0 60px 60px;
   line-height: 1.35;
 }
 
+
+.hamburger{
+  display:none; /* desktop */
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  border-radius: 10px;
+}
+
+.hamburger span{
+  position: absolute;
+  left: 11px;
+  right: 11px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform .22s ease, top .22s ease, opacity .18s ease;
+}
+
+/* 3 čiary */
+.hamburger span:nth-child(1){ top: 14px; }
+.hamburger span:nth-child(2){ top: 21px; }
+.hamburger span:nth-child(3){ top: 28px; }
+
+/* keď je otvorené -> X */
+.hamburger.is-open span:nth-child(1){
+  top: 21px;
+  transform: rotate(45deg);
+}
+.hamburger.is-open span:nth-child(2){
+  opacity: 0;
+}
+.hamburger.is-open span:nth-child(3){
+  top: 21px;
+  transform: rotate(-45deg);
+}
+
+.nav-actions{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+#podnadpis{padding-top: 15em ;}
+    /* MOBILE */
+    @media (max-width: 768px){
+  .topbar{
+    padding: 14px 16px;
+  }
+.logo-desktop{ display:none; }
+.logo-mobile{ display:block; }
+      .auth{
+        width: 100%;
+        justify-content:flex-end;
+      }
+      .auth input{
+        width: 48%;
+        min-width: 130px;
+      }
+      .hero-notch{
+        width: 190px;
+        height: 95px;
+      }
+      .hero-center{
+        padding-bottom: 110px;
+      }
+      #nadpis {
+  color:#999;
+  text-transform: uppercase;
+  font-size:55px;
+
+    }
+     .nav-actions .trezor-outline{
+    color: #4479FF;               /* alebo tvoja brand modrá */
+    border: 2px solid #4479FF;
+    background: rgba(31,79,255,0.08);
+  }
+  .nav-actions button{ width: 220px; }
+        #flip {
+  height:60px;
+  overflow:hidden;
+}
+
+#flip > div > div {
+  color:#fff;
+  padding: 0 24px;
+  height:94px;
+  line-height: 1.3;
+  display:inline-block;
+  padding-top: 2px;
+}
+#podnadpis{padding-top: 3em ;}
+  .nav-actions{
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+
+    display: flex;              /* nech je vždy flex */
+    flex-direction: column;
+    gap: 10px;
+
+    background: #fff;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    z-index: 9999;
+
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+    pointer-events: none;
+
+    transition: opacity .18s ease, transform .18s ease;
+    transform-origin: top right;
+  }
+  .nav-actions.is-open{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    transition-timing-function: cubic-bezier(.2,.8,.2,1);
+  }
+
+
+.hamburger{ display:block; color:#fff; }
+  .trezor-outline::before,
+  .trezor-glow:before{
+    pointer-events: none;
+  }
+
+    }
   </style>
 </head>
 
 <body>
   
   <header class="hero">
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo-slot"></div>
-        <img src="5_penazi_tag_white.svg"/>
-      </div>
-      <form class="auth" autocomplete="off">
-                <button class="trezor-outline" type="button">
-  Vytvoriť trezor
-</button>
-        <button class="trezor-glow" type="button">
-  Vstúpiť do trezoru
+<div class="topbar">
+  <div class="brand">
+    <!-- desktop logo -->
+    <img class="logo-desktop" src="5_penazi_tag_white.svg" alt="5peňazí" />
+
+    <!-- mobile logo  -->
+    <img class="logo-mobile" src="NBS_minilogo_5penazi_biele.png" alt="5peňazí" />
+  </div>
+
+  <div class="menu-wrap">
+<button class="hamburger" id="hamburger" type="button" aria-label="Menu" aria-expanded="false">
+  <span></span>
+  <span></span>
+  <span></span>
 </button>
 
-      </form>
+    <div class="nav-actions" id="navActions" aria-hidden="true">
+      <button class="trezor-outline" type="button">Vytvoriť trezor</button>
+      <button class="trezor-glow" type="button">Vstúpiť do trezora</button>
     </div>
-
+  </div>
+</div>
     <div class="hero-center">
-      <div id=nadpis>
-         ZBIERAJ 
-      <div id=flip>
-    <div><div>VEDOMOSTI</div></div>
-    <div><div>ZRUČNOSTI</div></div>
-    <div><div>TEHLIČKY</div></div>
-     </div>
-         DO SVOJHO TREZORU
-    </div>
+<div id="nadpis">
+  ZBIERAJ<br>
+  <span id="flip">
+    <span class="flip-inner">
+      <span class="word w1">VEDOMOSTI</span>
+      <span class="word w2">ZRUČNOSTI</span>
+      <span class="word w3">TEHLIČKY</span>
+    </span>
+  </span>
+  <br>
+  DO SVOJHO TREZORU
+</div>
+
 <br><br><br><br><br><br>
-      <p style="padding-top: 10em;">
+      <p id="podnadpis">
         Vytvor si profil, prihlás sa, a získaj zlaté tehly skenovaním QR kódu na hodinách finančného vzdelávania<br>
         Svoje heslo a meno nezabudni, tak ako do trezora, nedá sa už znova len tak získať!
       </p>
@@ -648,7 +746,30 @@ border-radius: 0 0 60px 60px;
   document.addEventListener('keydown', (e) => {
     if(e.key === 'Escape' && overlay.classList.contains('is-open')) closeModal();
   });
+  const hamburger = document.getElementById("hamburger");
+  const navActions = document.getElementById("navActions");
+
+  function setOpen(open){
+    navActions.classList.toggle("is-open", open);
+    hamburger.classList.toggle("is-open", open);
+    navActions.setAttribute("aria-hidden", String(!open));
+    hamburger.setAttribute("aria-expanded", String(open));
+  }
+
+  hamburger.addEventListener("click", () => {
+    const open = !navActions.classList.contains("is-open");
+    setOpen(open);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!navActions.classList.contains("is-open")) return;
+    if (navActions.contains(e.target) || hamburger.contains(e.target)) return;
+    setOpen(false);
+  });
+
+  window.addEventListener("resize", () => setOpen(false));
 </script>
 
 </body>
 </html>
+
