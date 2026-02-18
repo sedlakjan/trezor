@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Hero – stvorboj vibe</title>
+  <title>Trezor - Supertréning</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
@@ -31,7 +31,6 @@
   min-height: 100vh;
   background: linear-gradient(180deg, var(--hero), var(--hero2));
   overflow: hidden;
-border-radius: 0 0 60px 60px;
     }
 
 
@@ -601,8 +600,8 @@ border-radius: 0 0 60px 60px;
 </button>
 
     <div class="nav-actions" id="navActions" aria-hidden="true">
-      <button class="trezor-outline" type="button">Vytvoriť trezor</button>
-      <button class="trezor-glow" type="button">Vstúpiť do trezora</button>
+      <button class="trezor-outline" id="openRegister" type="button">Vytvoriť trezor</button>
+      <button class="trezor-glow" id="openLogin" type="button">Vstúpiť do trezora</button>
     </div>
   </div>
 </div>
@@ -617,27 +616,16 @@ border-radius: 0 0 60px 60px;
     </span>
   </span>
   <br>
-  DO SVOJHO TREZORU
+  VO SVOJOM TREZORE
 </div>
 
 <br><br><br><br><br><br>
       <p id="podnadpis">
         Vytvor si profil, prihlás sa, a získaj zlaté tehly skenovaním QR kódu na hodinách finančného vzdelávania<br>
-        Svoje heslo a meno nezabudni, tak ako do trezora, nedá sa už znova len tak získať!
+       <b>Svoje heslo a meno nezabudni, tak ako do trezora, nedá sa už znova len tak získať!</b>
       </p>
     </div>
-<svg class="hero-sosacik" viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true">
-  <path fill="#fff" d="
-    M0,0
-    H600
-    C660,0 690,120 720,120
-    C750,120 780,0 840,0
-    H1440
-    V160
-    H0
-    Z
-  "></path>
-</svg>
+
 
   </header>
 
@@ -665,7 +653,7 @@ border-radius: 0 0 60px 60px;
         <input type="password" placeholder="Heslo" />
       </label>
 
-      <button class="modal-primary" type="button">✓ Prihlásiť</button>
+      <button class="modal-primary" type="button">✓ Odomknúť</button>
       <p class="modal-mini">Tip: ak heslo zabudneš, do trezora sa už len tak nedostaneš 😄</p>
     </form>
   </div>
@@ -682,7 +670,6 @@ border-radius: 0 0 60px 60px;
         <span>Meno / nick</span>
         <input type="text" placeholder="napr. JanSedlak" />
       </label>
-
       <label class="field">
         <span>Heslo</span>
         <input type="password" placeholder="vymysli heslo" />
@@ -731,8 +718,8 @@ border-radius: 0 0 60px 60px;
     registerModal.classList.remove('is-active');
   }
 
-  btnLogin?.addEventListener('click', () => openModal('login'));
-  btnRegister?.addEventListener('click', () => openModal('register'));
+btnLogin?.addEventListener('click', () => { setOpen(false); openModal('login'); });
+btnRegister?.addEventListener('click', () => { setOpen(false); openModal('register'); });
 
   // klik na overlay mimo modalu zatvorí
   overlay.addEventListener('click', (e) => {
@@ -772,4 +759,5 @@ border-radius: 0 0 60px 60px;
 
 </body>
 </html>
+
 
